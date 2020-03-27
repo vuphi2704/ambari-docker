@@ -1,0 +1,27 @@
+version: '3.3'
+services:
+  ambari-agent:
+    container_name: ambari-agent
+    image: ambari-agent-pv
+    privileged: false
+    stdin_open: true
+    restart: on-failure
+    hostname: ambari-agent.com
+    tty: true
+    command: bash -c "ambari-agent start && tail -f /dev/null "
+    volumes:
+      - type: bind
+        source: ./ambari-agent.ini
+        target: /etc/ambari-agent/conf/ambari-agent.ini
+      - ./hdfs-data:/hadoop/hdfs/data
+    networks:
+      mdaas:
+        aliases:
+          - ambari-agent.com     
+    ports:
+      - 22
+      - 50070:50070
+      - 8088:8088
+networks:
+  mdaas:
+    external: true
