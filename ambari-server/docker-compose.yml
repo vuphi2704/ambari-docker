@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  ambari-server:
+    container_name: ambari-server
+    restart: always
+    hostname: ambari-server.com
+#    cap_add:
+#      - NET_ADMIN
+    restart: on-failure
+    privileged: false
+    image: ambari-server-pv
+    stdin_open: true
+    tty: true
+    command: bash -c "ambari-server start && tail -f /dev/null " 
+    ports:     
+      - 8087:8080
+      - 22
+    networks:
+      mdaas:
+        #ipv4_address: 192.168.0.21
+        aliases:
+          - ambari-server.com
+
+networks:
+  mdaas:
+    external: true
+#  soc-lab:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 192.168.0.0/24
+
